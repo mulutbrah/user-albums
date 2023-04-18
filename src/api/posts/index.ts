@@ -14,9 +14,40 @@ interface Comments {
   postId: number;
 }
 
+export const getPosts = async (): Promise<Post[]> => {
+  try {
+    const response: AxiosResponse<Post[]> = await axios.get(`${POST_API_URL}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return []
+  }
+};
+
 export const getPost = async (postId: string): Promise<Post | null> => {
   try {
     const response: AxiosResponse<Post> = await axios.get(`${POST_API_URL}/${postId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null
+  }
+};
+
+export const editPost = async (payload: Post): Promise<Post | null> => {
+  try {
+    const response: AxiosResponse<Post> = await axios.put<Post>(`${POST_API_URL}/${payload.id}`, payload);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null
+  }
+};
+
+export const deletePost = async (postId: number): Promise<Post | null> => {
+  try {
+    const response: AxiosResponse<Post> = await axios.delete(`${POST_API_URL}/${postId}`);
     return response.data;
   } catch (error) {
     console.error(error);

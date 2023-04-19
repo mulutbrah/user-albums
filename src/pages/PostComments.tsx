@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 
 import { getPost, getPostComments } from '../api/posts';
+import List from "../components/List";
 
 interface PostProps {
   id: number;
@@ -45,11 +46,14 @@ const PostComments: React.FC<{ postId: number }> = () => {
   return (
     <div>
       <h2>Comment From {post!.title}</h2>
-      {postComments.map((comment) => (
-        <div key={comment.id}>
-          <p>{comment.body}</p>
-        </div>
-      ))}
+
+      <ul>
+        {postComments.map((comment) => (
+          <List key={comment.id}>
+            <p>{comment.body}</p>
+          </List>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { getUsers } from '../api/users';
+import List from "../components/List";
 
 interface IUser {
   id: number;
@@ -29,14 +30,20 @@ const UserList: React.FC = () => {
 
   return (
     <div>
-      <h1>User List</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            <Link to={`/users/${user.id}`}>{user.name}</Link>
-          </li>
-        ))}
-      </ul>
+        <h1>User List</h1>
+
+        <ul>
+            {users.map((user) => (
+            <List  key={user.id}>
+                <div>{user.name}</div>
+
+                <div className="actions">
+                    <Link to={`/users/${user.id}/posts`}>View Posts</Link>
+                    <Link to={`/users/${user.id}/albums`}>View Albums</Link>
+                </div>
+            </List>
+            ))}
+        </ul>
     </div>
   );
 }

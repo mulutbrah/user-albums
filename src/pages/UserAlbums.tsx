@@ -35,7 +35,7 @@ const UserAlbums: React.FC<{ userId: number }> = () => {
 
   return (
     <div>
-      <h2>User Posts</h2>
+      <h2>User Albums</h2>
       {userAlbums.map((post) => (
         <div key={post.id}>
           <img src={post.media_url} alt="album" />

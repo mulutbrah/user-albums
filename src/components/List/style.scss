@@ -1,0 +1,28 @@
+.list {
+    margin: 0;
+    align-items: center;
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    list-style: none;
+    justify-content: space-between;
+    padding: 10px 15px;
+    width: 450px;
+
+    &:not(:last-of-type) {
+        margin-bottom: 10px;
+    }
+    
+    span {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .actions {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        width: 200px;
+    }
+}
+  

@@ -34,6 +34,17 @@ export const getPost = async (postId: string): Promise<Post | null> => {
   }
 };
 
+export const createPost = async (payload: Post): Promise<Post | null> => {
+  try {
+    const response: AxiosResponse<Post> = await axios.post<Post>(`${POST_API_URL}`, payload);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null
+  }
+};
+
 export const editPost = async (payload: Post): Promise<Post | null> => {
   try {
     const response: AxiosResponse<Post> = await axios.put<Post>(`${POST_API_URL}/${payload.id}`, payload);

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { getPosts, deletePost, editPost } from '../api/posts';
+
+import Modal from "../components/Modal";
 
 interface IPost {
   id: number;
@@ -10,30 +13,44 @@ interface IPost {
 
 const PostList: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [isPostEdited, setIsPostEdited] = useState(false);
-  const [inputPostValue, setInputPostValue] = useState('');
+  const [postDataSelected, setPostDataSelected] = useState<IPost>({
+    id: 0,
+    title: '',
+    userId: 0
+  });
 
-  const handleInputPostValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputPostValue(event.target.value);
-  }
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalPurpose, setModalPurpose] = useState('');
 
-  const handleEditComment = async (post: IPost) => {
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
+
+  const handleEditComment = async (newValue: string) => {
     const payload = {
-      ...post,
-      title: inputPostValue
+      ...postDataSelected,
+      title: newValue
     }
 
     const res = await editPost(payload);
 
-    console.log(res);
-
-    setIsPostEdited(false);
+    setPosts(prevState => prevState.map(post => {
+      if (post.id === payload.id) {
+        return { ...post, ...res };
+      } else {
+        return post;
+      }
+    }));
   };
 
-  const preparingForEditPost = async (post: IPost) => {
-    setIsPostEdited(true);
-
-    // await handleEditComment(post)
+  const preparingForEditPost = (post: IPost) => {
+    handleOpenModal();
+    setModalPurpose('Update');
+    setPostDataSelected(post)
   }
 
   const handleDeleteComment = async (id: number) => {
@@ -63,14 +80,17 @@ const PostList: React.FC = () => {
 
   return (
     <div>
+      {/* Dialog */}
+      <Modal isOpen={isOpen} onClose={handleCloseModal} onSubmit={handleEditComment} action={modalPurpose} title="Post" />
+      {/* end of Dialog */}
+
       <h2>Post List</h2>
+
       {posts.map((post) => (
         <div key={post.id}>
-          {isPostEdited ? (
-            <input type="text" value={inputPostValue} onChange={handleInputPostValue} />
-          ):(
-            <p>{post.title}</p>
-          )}
+          <Link to={`/posts/${post.id}/comments`}>
+            {post.title}
+          </Link>
           
           <span onClick={() => preparingForEditPost(post)}>Edit</span>
           <span onClick={() => handleDeleteComment(post.id)}>delete</span>
